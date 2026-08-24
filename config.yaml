@@ -1,0 +1,62 @@
+# ============================================================================
+# UV-RIP-seq Snakemake configuration
+# Edit this file + metadata.tsv; the workflow reads everything from here.
+# ============================================================================
+
+# ---- I/O -----------------------------------------------------------------
+metadata: "metadata.tsv"          # sample sheet (fastq_r2 blank => single-end)
+outdir:   "results"               # all outputs go here (relative or absolute)
+
+# ---- Reference -----------------------------------------------------------
+star_index: "/projects/b1042/LauberthLab/Genome/STAR_hg38+rDNA"
+gtf:        "/projects/b1042/LauberthLab/Genome/hg38_rDNA.gtf"   # only for the DE step
+
+# ---- Threads (per-rule cap; SLURM resources live in profiles/slurm) -------
+threads: 20
+
+# ---- Trimming (Trim Galore) ----------------------------------------------
+trim:
+  quality: 30
+  adapter: illumina               # illumina | nextera | small_rna
+  extra: "--fastqc"
+
+# ---- Alignment (STAR) — defaults reproduce UV-RIP_rDNA.sh -----------------
+star:
+  align_ends_type: EndToEnd
+  align_mates_gap_max: 15000
+  out_filter_multimap_nmax: 1
+  out_filter_score_min: 10
+  out_filter_match_nmin: 24
+  extra: "--outFilterType BySJout --outReadsUnmapped Fastx --outSAMattributes All"
+
+# ---- Dedup ---------------------------------------------------------------
+remove_duplicates: true
+mapq_min: 255
+
+# ---- Downsampling to a common depth --------------------------------------
+downsample:
+  mode: min                       # min | target
+  downsample_reads: 20000000      # used only when mode == target
+  seed: 42
+  group_by: all                   # all | type
+
+# ---- Merge / bigWig (bamCompare) -----------------------------------------
+control_type: IgG                 # bamCompare denominator (IgG | Input)
+bigwig:
+  normalize_using: RPKM           # RPKM | CPM | BPM | RPGC | None
+  scale_factors_method: None      # None (trust downsampling) | readCount | SES
+  bin_size: 10
+  extra: "-p max"
+  make_coverage_tracks: true      # also emit per-group bamCoverage tracks
+
+# ---- Optional differential enrichment (DESeq2) ---------------------------
+de:
+  enabled: false
+  strandedness: 2                 # featureCounts -s (0 none, 1 fwd, 2 rev)
+  control_type: IgG
+  min_cpm: 0.3
+  lfc_threshold: 0.5849           # ~1.5-fold
+  padj_threshold: 0.05
+
+# ---- Conda env name (used by Run_pipeline.sh) ----------------------------
+conda_env: uvrip

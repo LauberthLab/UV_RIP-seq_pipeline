@@ -1,0 +1,38 @@
+# Single environment holding Snakemake AND every tool the rules call.
+# Activate it once (`conda activate uvrip`) and run the workflow WITHOUT
+# --use-conda: rules find their tools on PATH, and the SLURM profile passes
+# --export=ALL so compute nodes inherit the same PATH. This is the most robust
+# setup on Quest — it avoids the non-interactive-subshell / "conda: command
+# not found" failures that --use-conda hits there.
+#
+# The `conda:` directives in the rules still point here, so `--use-conda` also
+# works if you ever want per-rule envs (see README).
+#
+# Build:
+#   mamba env create -f workflow/envs/uvrip.yaml
+#   # or into an allocation:
+#   mamba env create -f workflow/envs/uvrip.yaml -p /projects/b1042/LauberthLab/conda-envs/uvrip
+#
+# If you prefer to keep Snakemake in a separate `snake` env (your existing
+# convention), delete the snakemake line below and activate both envs' tools
+# as described in the README.
+name: uvrip
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - snakemake-minimal=7.32.4    # remove if using a separate `snake` env
+  - fastqc=0.12.1
+  - trim-galore=0.6.10
+  - cutadapt=4.6
+  - star=2.7.5a                 # must match the version that built star_index
+  - samtools=1.19.2             # >=1.7 for fixmate -m / markdup
+  - subread=2.0.6               # featureCounts (optional DE step)
+  - deeptools=3.5.4             # bamCompare / bamCoverage
+  - bedtools=2.31.0
+  - multiqc=1.21
+  - pandas=2.2
+  - numpy=1.26
+  - pyyaml=6.0

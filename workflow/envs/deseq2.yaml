@@ -1,0 +1,18 @@
+# Optional environment for the differential-enrichment step (de_analysis.R).
+# Only needed if you run `03_diff_enrichment.sh`. On Quest you can instead use
+# `module load R/4.2.0` if it already has DESeq2 / edgeR — set `de.runtime: modules`
+# in config.yaml. Build with:
+#   mamba env create -f envs/deseq2.yaml
+name: uvrip-deseq2
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base=4.2
+  - bioconductor-deseq2=1.38
+  - bioconductor-edger=3.40
+  - r-optparse
+  - r-ggplot2
+  - r-ggrepel
+  - r-data.table

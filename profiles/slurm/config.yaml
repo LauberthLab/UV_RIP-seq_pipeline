@@ -1,0 +1,38 @@
+# ---------------------------------------------------------------------------
+# Snakemake 7 SLURM profile (generic cluster submission).
+# Usage: snakemake --profile profiles/slurm
+#
+# EDIT the account/partition in `default-resources` below for your allocation.
+#
+# --export=ALL is the important bit: it propagates the *activated conda env's*
+# PATH to every compute node, so rule shell commands find STAR/samtools/etc.
+# without --use-conda. This is what makes the single-env approach work on Quest.
+# ---------------------------------------------------------------------------
+jobs: 50
+latency-wait: 60
+keep-going: True
+printshellcmds: True
+rerun-incomplete: True
+rerun-triggers: mtime
+
+# Per-job submission command. {resources.*} and {threads} are filled per rule.
+cluster: >-
+  mkdir -p results/logs/slurm &&
+  sbatch
+  --account={resources.account}
+  --partition={resources.partition}
+  --nodes=1
+  --ntasks=1
+  --cpus-per-task={threads}
+  --mem={resources.mem_mb}M
+  --time={resources.runtime}
+  --job-name=smk.{rule}
+  --output=results/logs/slurm/{rule}.%j.out
+  --export=ALL
+  --parsable
+
+default-resources:
+  - account="p32170"
+  - partition="short"
+  - mem_mb=8000
+  - runtime=120        # minutes; SLURM accepts a bare integer as minutes

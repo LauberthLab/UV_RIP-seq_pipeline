@@ -1,0 +1,5 @@
+sample	condition	type	replicate	fastq_r1	fastq_r2	downsample_frac
+21161R-09-02v1_S101_L004	TOP1	IgG	1	/projects/b1042/LauberthLab/TOP1_nucleolus/UV_RIP-seq/FASTQ/21161R-09-02v1_S101_L004_R1_001.fastq.gz	/projects/b1042/LauberthLab/TOP1_nucleolus/UV_RIP-seq/FASTQ/21161R-09-02v1_S101_L004_R2_001.fastq.gz	
+21161R-09-03v1_S98_L004	TOP1	IP	1	/projects/b1042/LauberthLab/TOP1_nucleolus/UV_RIP-seq/FASTQ/21161R-09-03v1_S98_L004_R1_001.fastq.gz	/projects/b1042/LauberthLab/TOP1_nucleolus/UV_RIP-seq/FASTQ/21161R-09-03v1_S98_L004_R2_001.fastq.gz	
+21161R-09-05v1_S103_L004	TOP1	IgG	2	/projects/b1042/LauberthLab/TOP1_nucleolus/UV_RIP-seq/FASTQ/21161R-09-05v1_S103_L004_R1_001.fastq.gz	/projects/b1042/LauberthLab/TOP1_nucleolus/UV_RIP-seq/FASTQ/21161R-09-05v1_S103_L004_R2_001.fastq.gz	
+21161R-09-06v1_S99_L004	TOP1	IP	2	/projects/b1042/LauberthLab/TOP1_nucleolus/UV_RIP-seq/FASTQ/21161R-09-06v1_S99_L004_R1_001.fastq.gz	/projects/b1042/LauberthLab/TOP1_nucleolus/UV_RIP-seq/FASTQ/21161R-09-06v1_S99_L004_R2_001.fastq.gz	
